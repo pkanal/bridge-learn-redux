@@ -1,37 +1,40 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
 import { connect } from 'react-redux'
-import { addProduct } from './actions';
+import { favouritePokemon, getPokemon } from './actions';
 
+import {PokemonView} from './components/pokemon-view';
 
-import { API_BASE_URL } from './constants/api-url';
+import { GET_ALL_POKEMON_URL } from './constants/api-url';
+
+//https://img.pokemondb.net/artwork/${pokemon}.jpg <-- use for pictures
 
 const mapStateToProps = state => ({
-  products: state.products,
-})
+  pokemon: state.pokemon.list,
+});
 
 const mapDispatchToProps = {
-  addProduct,
-}
+  favouritePokemon,
+  getPokemon
+};
 
 class App extends Component {
   componentDidMount() {
-    this.props.addProduct({
-      name: 'Table',
-      department: 'Furniture',
-      price: '300.00',
-      stock: 5,
-    });
+    this.props.getPokemon();
   }
 
   render() {
-    const { products, addProduct } = this.props;
+
+    const { pokemon, favouritePokemon } = this.props; // go over destructuring again
     return (
+
       <div>
-        {products.map(product => <div>{product.name}</div>)}
-        <button onClick={ () => addProduct({ name: 'Sofa' }) }>Add Sofa</button>
+        <h1>Pokemon App!</h1>
+        <PokemonView favourite={(name) => console.log(name)} pokeData={{name: 'Della', height: '180cm'}} />
+
+        {pokemon.map(poke => <h2 key={poke.name}>{poke.name}</h2>)}
+
       </div>
+      //create PokemonList Here
     );
   }
 }
